@@ -29,6 +29,7 @@ public class Main {
 			Consultas.buscarLinks(url, assunto);
 			break;
 		case 3:
+			Consultas.buscarParagrafos(url);
 			break;
 		case 9:
 			System.exit(0);
@@ -37,10 +38,5 @@ public class Main {
 				JOptionPane.showMessageDialog(null, "Opcão Inválida.");
 		}
 		}
-		
-		
-		
-		
 	}
-
 }

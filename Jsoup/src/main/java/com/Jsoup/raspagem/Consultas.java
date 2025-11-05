@@ -26,7 +26,17 @@ public class Consultas {
 
 	public static void buscarParagrafos(String url) {
 		
-		
+		try {
+			Document doc = Jsoup.connect(url).get();
+			Elements colecao = doc.select("p");
+			for(Element paragrafo : colecao) {
+				System.out.println("P: " + paragrafo.text());
+			}
+			
+			System.out.println("\n");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
