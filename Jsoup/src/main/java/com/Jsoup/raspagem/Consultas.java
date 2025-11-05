@@ -10,7 +10,7 @@ public class Consultas {
 		
 		try {
 			Document doc = Jsoup.connect(url).get(); //transforma a url em um Document
-			Elements links = doc.select("a[href]"); //busca todos os links href do html da ulr e armazena em Elements
+			Elements links = doc.select("a[href]"); //busca todos os links href do html da url e armazena em Elements
 			for(Element elemento : links) {
 				if(elemento.attr("href").contains(assunto)) {
 					System.out.println("Link: " + elemento.attr("href")); //trás apenas os links desejados

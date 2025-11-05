@@ -5,8 +5,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		String url = JOptionPane.showInputDialog("Digte a url", "https://");
-		
+		String url= "";
 		String siteG1 = "https://g1.com.br";
 		String siteUol = "https://uol.com.br";
 		
@@ -14,11 +13,9 @@ public class Main {
 		
 		while(opcao != 9) {
 		opcao = Integer.parseInt(JOptionPane.showInputDialog("Digite a opção:"
-				 + "\n1 - Mudar site"
-				 + "\n2 - Buscar Links"
-				 + "\n3 - Buscar Parágrafo"
-				 + "\n4 - Buscar Notícias do G1"
-				 + "\n5 - Buscar Notícias do Uol"
+				 + "\n1 - Digite um site"
+				 + "\n2 - Buscar Notícias do G1"
+				 + "\n3 - Buscar Notícias do Uol"
 				 + "\n9 - Sair"));
 		
 		//implemtar caso nao insiram nenhum valor
@@ -27,21 +24,38 @@ public class Main {
 		
 		switch(opcao) {
 		case 1:
-			url = JOptionPane.showInputDialog("Digte a url", url); //trás a url anteriormente digitada para editar
+			url = JOptionPane.showInputDialog("Digte a url:", "https://"); 
+			//estrutura de sub menu da opçao digitar site
+			while(opcao != 4) {
+				opcao = Integer.parseInt(JOptionPane.showInputDialog("Digite a opção:"
+						+ "\n1 - Mudar Site" 
+						+ "\n2 - Buscar Links"
+						 + "\n3 - Buscar Parágrafo"
+						 + "\n4 - Voltar"));
+				switch(opcao) {
+				case 1:
+					url = JOptionPane.showInputDialog("Digte a url:", url); //trás a url anteriormente digitada para editar
+					break;
+				case 2:
+					String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todos os links basta deixar em branco.");
+					Consultas.buscarLinks(url, assunto);
+					break;
+				case 3:
+					Consultas.buscarParagrafos(url);
+					break;
+				case 4: //faz apenas o break para voltar ao menu anterior
+					break;
+					default:
+						JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+				}
+			}
 			break;
 		case 2:
-			String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todos os links basta deixar em branco.");
-			Consultas.buscarLinks(url, assunto);
-			break;
-		case 3:
-			Consultas.buscarParagrafos(url);
-			break;
-		case 4:
-			String assuntoG1 = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todos os links basta deixar em branco.");
+			String assuntoG1 = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
 			Consultas.buscarNoticiasG1(siteG1, assuntoG1);
 			break;
-		case 5:
-			String assuntoUol = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todos os links basta deixar em branco.");
+		case 3:
+			String assuntoUol = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
 			Consultas.buscarNoticiasUol(siteUol, assuntoUol);
 			break;
 		case 9:
