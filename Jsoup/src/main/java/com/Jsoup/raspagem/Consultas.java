@@ -1,6 +1,7 @@
 package com.Jsoup.raspagem;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,6 +89,40 @@ public class Consultas {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static List<Noticia> buscarNoticiasG1Paginado(int qtdPaginas) throws IOException {
+	    List<Noticia> lista = new ArrayList<>();
+
+	    
+	    //percorre a quantidade solicitada de páginas do G1
+	    //url padrao é: https://g1.globo.com/ultimas-noticias/    https://g1.globo.com/ultimas-noticias/?page=2 ....
+	    for (int i = 1; i <= qtdPaginas; i++) {
+	        String url = "https://g1.globo.com/ultimas-noticias/";
+	        if (i > 1) {
+	            url += "?page=" + i; //incrementa o número da página
+	        }
+
+	        Document doc = Jsoup.connect(url).timeout(10000).get();
+	        Elements noticias = doc.select("a.feed-post-link");
+
+	        for (Element noticia : noticias) {
+	            Element p = noticia.selectFirst("p");
+	            if (p == null) 
+	            	continue;
+
+	            String titulo = p.text();
+	            String link   = noticia.absUrl("href");
+
+	            //Imprime no console e popula a lista
+	            System.out.println("Título: " + titulo);
+	            System.out.println("Link:   " + link);
+	            System.out.println("----------------------------------");
+	            lista.add(new Noticia(titulo, link));
+	        }
+	    }
+
+	    return lista;
 	}
 	
 	public static void geraCSV(List<Noticia> noticias, String nomeDoArquivo) throws Exception {

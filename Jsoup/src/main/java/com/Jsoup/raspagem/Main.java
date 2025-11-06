@@ -33,8 +33,8 @@ public class Main {
 						+ "\n2 - Buscar Links do site"
 						 + "\n3 - Buscar Parágrafos do site"
 						 + "\n4 - Voltar"));
-				switch(opcao) {
 				
+				switch(opcao) {
 				case 1:
 					url = JOptionPane.showInputDialog("Digte a url:", url); //trás a url anteriormente digitada para editar
 					break;
@@ -56,38 +56,114 @@ public class Main {
 			}
 			break;
 			
-		case 2, 3:
-			//saber qual o site selecionado
-			if(opcao==2) {
+		case 2:
 				site = "https://g1.com.br";
-				opcao = 0; //seta variável para entrar no sub menu, pois 2 é a condicao dele.
-				nomeArquivoCSV = "noticias_G1.csv";
-			}else if (opcao ==3) {
-				site = "https://uol.com.br";
-				nomeArquivoCSV = "noticias_UOL.csv";
-			}
-			String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
-			List<Noticia> lista = Consultas.buscarNoticias(site, assunto);
+		
+		while(opcao != 3) {
+			opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+					+ "\nDigite a opção:"
+					+ "\n1 - Buscar notícias mais atuais do G1" 
+					+ "\n2 - Buscar notícias do G1 de forma paginada" 
+					 + "\n3 - Voltar"));
 			
+			switch(opcao) {
+			case 1:
+				String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
+				List<Noticia> noticiasMaisRecentes = Consultas.buscarNoticias(site, assunto);
+				
+				while(opcao != 2) {
+					opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+							+ "\nDigite a opção:"
+							+ "\n1 - Gerar arquivo .CSV ?" 
+							 + "\n2 - Voltar"));
+					
+					switch(opcao) {
+					case 1:
+						nomeArquivoCSV = "noticias_G1.csv";
+						Consultas.geraCSV(noticiasMaisRecentes, nomeArquivoCSV);
+						break;
+						
+					case 2: //faz apenas o break para voltar ao menu anterior
+						break;
+						default:
+							JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+					}
+				}
+				break;
+				
+			case 2: 
+				int quantPaginas =  Integer.parseInt(JOptionPane.showInputDialog("Digite a quantidade de páginas que deseja buscar: "));
+				List<Noticia> noticiasPaginadas = Consultas.buscarNoticiasG1Paginado(quantPaginas);
+				opcao = 0; //para entrar no sub menu
+				while(opcao != 2) {
+					opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+							+ "\nDigite a opção:"
+							+ "\n1 - Gerar arquivo .CSV ?" 
+							 + "\n2 - Voltar"));
+					
+					switch(opcao) {
+					case 1:
+						nomeArquivoCSV = "noticias_G1_paginada.csv";
+						Consultas.geraCSV(noticiasPaginadas, nomeArquivoCSV);
+						break;
+						
+					case 2: //faz apenas o break para voltar ao menu anterior
+						break;
+						default:
+							JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+					}
+				}
+				
+				break;
+				
+			case 3:
+				break;//faz apenas o break para voltar ao menu anterior
+				default:
+					JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+			}
+		}
+				
+			break;
+		case 3:
+			site = "https://uol.com.br";
+			opcao = 0; //seta variável para entrar no sub menu por ser a mesma condicao do case e while
 			while(opcao != 2) {
 				opcao = Integer.parseInt(JOptionPane.showInputDialog(site
 						+ "\nDigite a opção:"
-						+ "\n1 - Gerar arquivo .CSV ?" 
+						+ "\n1 - Buscar notícias mais atuais do Uol" 
 						 + "\n2 - Voltar"));
-				switch(opcao) {
 				
+				switch(opcao) {
 				case 1:
-					Consultas.geraCSV(lista, nomeArquivoCSV);
-					break;
+					String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
+					List<Noticia> noticiasMaisRecentes = Consultas.buscarNoticias(site, assunto);
 					
-				case 2: //faz apenas o break para voltar ao menu anterior
-					break;
+					while(opcao != 2) {
+						opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+								+ "\nDigite a opção:"
+								+ "\n1 - Gerar arquivo .CSV ?" 
+								 + "\n2 - Voltar"));
+						
+						switch(opcao) {
+						case 1:
+							nomeArquivoCSV = "noticias_UOL.csv";
+							Consultas.geraCSV(noticiasMaisRecentes, nomeArquivoCSV);
+							break;
+							
+						case 2: //faz apenas o break para voltar ao menu anterior
+							break;
+							default:
+								JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+						}
+					}
+				case 2:
+					break;//faz apenas o break para voltar ao menu anterior
 					default:
 						JOptionPane.showMessageDialog(null, "Opcão Inválida.");
 				}
-			}
+			}	
 			break;
-			
+				
 		case 9:
 			System.exit(0);
 			break;
