@@ -1,14 +1,14 @@
 package com.Jsoup.raspagem;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 public class Main {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
-		String url= "";
-		String siteG1 = "https://g1.com.br";
-		String siteUol = "https://uol.com.br";
-		
+		String site="";
+		String nomeArquivoCSV="";
 		Integer opcao = 0;
 		
 		while(opcao != 9) {
@@ -24,25 +24,30 @@ public class Main {
 		
 		switch(opcao) {
 		case 1:
-			url = JOptionPane.showInputDialog("Digte a url:", "https://"); 
+			String url = JOptionPane.showInputDialog("Digte a url:", "https://"); 
 			//estrutura de sub menu da opçao digitar site
 			while(opcao != 4) {
-				opcao = Integer.parseInt(JOptionPane.showInputDialog("Digite a opção:"
-						+ "\n1 - Mudar Site" 
-						+ "\n2 - Buscar Links"
-						 + "\n3 - Buscar Parágrafo"
+				opcao = Integer.parseInt(JOptionPane.showInputDialog("Site atual: " + url
+						+ "\nDigite a opção:"
+						+ "\n1 - Mudar Site atual" 
+						+ "\n2 - Buscar Links do site"
+						 + "\n3 - Buscar Parágrafos do site"
 						 + "\n4 - Voltar"));
 				switch(opcao) {
+				
 				case 1:
 					url = JOptionPane.showInputDialog("Digte a url:", url); //trás a url anteriormente digitada para editar
 					break;
+					
 				case 2:
 					String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todos os links basta deixar em branco.");
 					Consultas.buscarLinks(url, assunto);
 					break;
+					
 				case 3:
 					Consultas.buscarParagrafos(url);
 					break;
+					
 				case 4: //faz apenas o break para voltar ao menu anterior
 					break;
 					default:
@@ -50,14 +55,39 @@ public class Main {
 				}
 			}
 			break;
-		case 2:
-			String assuntoG1 = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
-			Consultas.buscarNoticiasG1(siteG1, assuntoG1);
+			
+		case 2, 3:
+			//saber qual o site selecionado
+			if(opcao==2) {
+				site = "https://g1.com.br";
+				opcao = 0; //seta variável para entrar no sub menu, pois 2 é a condicao dele.
+				nomeArquivoCSV = "noticias_G1.csv";
+			}else if (opcao ==3) {
+				site = "https://uol.com.br";
+				nomeArquivoCSV = "noticias_UOL.csv";
+			}
+			String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
+			List<Noticia> lista = Consultas.buscarNoticias(site, assunto);
+			
+			while(opcao != 2) {
+				opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+						+ "\nDigite a opção:"
+						+ "\n1 - Gerar arquivo .CSV ?" 
+						 + "\n2 - Voltar"));
+				switch(opcao) {
+				
+				case 1:
+					Consultas.geraCSV(lista, nomeArquivoCSV);
+					break;
+					
+				case 2: //faz apenas o break para voltar ao menu anterior
+					break;
+					default:
+						JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+				}
+			}
 			break;
-		case 3:
-			String assuntoUol = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
-			Consultas.buscarNoticiasUol(siteUol, assuntoUol);
-			break;
+			
 		case 9:
 			System.exit(0);
 			break;
