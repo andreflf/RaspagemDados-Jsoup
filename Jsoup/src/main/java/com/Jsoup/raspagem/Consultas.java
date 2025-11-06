@@ -90,32 +90,39 @@ public class Consultas {
 		}
 	}
 	
-	public static void geraCSV(List<Noticia> noticias, String filename) throws Exception {
-	    File f = new File(filename);
-	    boolean existe = f.exists();
-
-
-	    Path path = f.toPath();
+	public static void geraCSV(List<Noticia> noticias, String nomeDoArquivo) throws Exception {
+		
+		File file = new File(nomeDoArquivo);// cria um objeto File que representa o arquivo no sistema de arquivos
+	  
+	    Path path = file.toPath(); // obtém o Path (NIO) correspondente ao File — usado pela API do pacote java.nio.file
+	    
+	    //Se quiser salvar em uma pasta específica:
+	   // Files.createDirectories(Paths.get("data")); //criar uma pasta no diretório do projeto
+	  //  Path path = Paths.get("data", filename); //criar o CSV dentro da pasta criada
+	    
+	    //abre um BufferedWriter usando Files.newBufferedWriter.
+	    //try-with-resources garante que 'bw' será fechado automaticamente ao final do bloco.
 	    try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
-	            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+	            StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) { //TRUNCATE_EXISTING sempre cria/sobrescreve o arquivo
 	    	
-	    	 // BOM UTF-8 resolve problema de caracteres especiais no CSV
-    	    bw.write("\uFEFF");
+	    	// escreve o BOM UTF-8 no início do arquivo, ajuda o Excel do Windows a reconhecer corretamente o encoding UTF-8.
+    	    bw.write("\uFEFF");// resolve problema de caracteres especiais no CSV
     	    
-	    	if (!existe){
-		        bw.write("titulo;link");
+    	   //escreve a linha de cabeçalho do CSV.
+		        bw.write("Título da Notícia;Link");
 		        bw.newLine();
-		    }
 
-		    for (Noticia n : noticias){
-		        bw.write("\"" + n.titulo.replace(";", ",") + "\";" + n.link);
+	    	// percore a lista de notícias e escreve cada uma como uma linha do CSV.   
+		    for (Noticia noticia : noticias){
+		        bw.write("\"" + noticia.titulo.replace(";", ",") + "\";" + noticia.link); // troca ';' dentro do título por ',' para não quebrar o delimitador.
 		        bw.newLine();
 		    }
 
 		    System.out.println("\n\nArquivo gerado com sucesso!\n");
-		    JOptionPane.showMessageDialog(null, "Arquivo " + filename + " gerado com sucesso"
+		    JOptionPane.showMessageDialog(null, "Arquivo " + nomeDoArquivo + " gerado com sucesso"
 		    		+ "\nna pasta do projeto.");
-		    bw.close();
+		    
+		  //  bw.close(); // fecha explicitamente o writer (desnecessário aqui porque try-with-resources já fecha)
 			
 		} catch (Exception e) {
 			e.printStackTrace();
