@@ -58,7 +58,6 @@ public class Main {
 			
 		case 2:
 				site = "https://g1.com.br";
-		
 		while(opcao != 3) {
 			opcao = Integer.parseInt(JOptionPane.showInputDialog(site
 					+ "\nDigite a opção:"
@@ -71,11 +70,12 @@ public class Main {
 				String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
 				List<Noticia> noticiasMaisRecentes = Consultas.buscarNoticias(site, assunto);
 				
-				while(opcao != 2) {
+				while(opcao != 3) {
 					opcao = Integer.parseInt(JOptionPane.showInputDialog(site
 							+ "\nDigite a opção:"
 							+ "\n1 - Gerar arquivo .CSV ?" 
-							 + "\n2 - Voltar"));
+							+ "\n2 - Saber quais palavras mais se repetem" 
+							 + "\n3 - Voltar"));
 					
 					switch(opcao) {
 					case 1:
@@ -83,7 +83,11 @@ public class Main {
 						Consultas.geraCSV(noticiasMaisRecentes, nomeArquivoCSV);
 						break;
 						
-					case 2: //faz apenas o break para voltar ao menu anterior
+					case 2: 
+						Consultas.ContadorDePalavras(noticiasMaisRecentes);
+						break;
+					
+					case 3: //faz apenas o break para voltar ao menu anterior
 						break;
 						default:
 							JOptionPane.showMessageDialog(null, "Opcão Inválida.");
@@ -95,11 +99,12 @@ public class Main {
 				int quantPaginas =  Integer.parseInt(JOptionPane.showInputDialog("Digite a quantidade de páginas que deseja buscar: "));
 				List<Noticia> noticiasPaginadas = Consultas.buscarNoticiasG1Paginado(quantPaginas);
 				opcao = 0; //para entrar no sub menu
-				while(opcao != 2) {
+				while(opcao != 3) {
 					opcao = Integer.parseInt(JOptionPane.showInputDialog(site
 							+ "\nDigite a opção:"
 							+ "\n1 - Gerar arquivo .CSV ?" 
-							 + "\n2 - Voltar"));
+							+ "\n2 - Saber quais palavras mais se repetem" 
+							 + "\n3 - Voltar"));
 					
 					switch(opcao) {
 					case 1:
@@ -107,7 +112,11 @@ public class Main {
 						Consultas.geraCSV(noticiasPaginadas, nomeArquivoCSV);
 						break;
 						
-					case 2: //faz apenas o break para voltar ao menu anterior
+					case 2:
+						Consultas.ContadorDePalavras(noticiasPaginadas);
+						break;
+						
+					case 3: //faz apenas o break para voltar ao menu anterior
 						break;
 						default:
 							JOptionPane.showMessageDialog(null, "Opcão Inválida.");
@@ -138,11 +147,12 @@ public class Main {
 					String assunto = JOptionPane.showInputDialog("Digite o assunto: \nobs: se quiser todas as notícias basta deixar em branco.");
 					List<Noticia> noticiasMaisRecentes = Consultas.buscarNoticias(site, assunto);
 					
-					while(opcao != 2) {
+					while(opcao != 3) {
 						opcao = Integer.parseInt(JOptionPane.showInputDialog(site
 								+ "\nDigite a opção:"
 								+ "\n1 - Gerar arquivo .CSV ?" 
-								 + "\n2 - Voltar"));
+								+ "\n2 - Saber quais palavras mais se repetem" 
+								 + "\n3 - Voltar"));
 						
 						switch(opcao) {
 						case 1:
@@ -150,7 +160,11 @@ public class Main {
 							Consultas.geraCSV(noticiasMaisRecentes, nomeArquivoCSV);
 							break;
 							
-						case 2: //faz apenas o break para voltar ao menu anterior
+						case 2:
+							Consultas.ContadorDePalavras(noticiasMaisRecentes);
+							break;
+							
+						case 3: //faz apenas o break para voltar ao menu anterior
 							break;
 							default:
 								JOptionPane.showMessageDialog(null, "Opcão Inválida.");

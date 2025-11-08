@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -161,9 +163,40 @@ public class Consultas {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}   
+	}
+	
+	public static Map<String, Integer> ContadorDePalavras(List<Noticia> noticias) {
+	    Map<String, Integer> mapa = new HashMap<>();
 
-	    
+	    for (Noticia n : noticias) {
+	        String titulo = n.titulo;
+
+	        // normalização dos títulos
+	        titulo = titulo.toLowerCase();
+	        titulo = titulo.replaceAll("[áàãâ]", "a")
+	                       .replaceAll("[éèê]", "e")
+	                       .replaceAll("[íì]", "i")
+	                       .replaceAll("[óòõô]", "o")
+	                       .replaceAll("[úùû]", "u")
+	                       .replaceAll("ç", "c");
+
+	        // remove caracteres que não são letras, números ou espaços
+	        titulo = titulo.replaceAll("[^a-z0-9 ]", " ");
+
+	        // separa o texto em palavras ignorando os espaços entre eles (se tiver).
+	        String[] palavras = titulo.split("\\s+");
+
+	        for (String p : palavras) {
+	            if (p.length() <= 4) continue; // ignora palavras muito curtas
+
+	            mapa.put(p, mapa.getOrDefault(p, 0) + 1);
+	        }
+	    }
+	    //imprime as 30 palavras mais frequentes.
+	    mapa.entrySet().stream().sorted((a,b) -> b.getValue() - a.getValue()).limit(30).forEach(System.out::println);
+
+	    return mapa;
 	}
 	
 
