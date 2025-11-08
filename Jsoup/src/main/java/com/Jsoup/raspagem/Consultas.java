@@ -5,14 +5,17 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document; //pra usar Document com Jsoup tem que ser o import da biblioteca do Jsoup (org.jsoup.nodes.Document) e nao o javax.swing.text.Document
 import org.jsoup.nodes.Element;
@@ -20,9 +23,8 @@ import org.jsoup.select.Elements;
 
 public class Consultas {
 	
-
 	public static Elements noticias;
-	
+			
 	public static void buscarLinks(String url, String assunto) {
 		
 		try {
@@ -186,18 +188,35 @@ public class Consultas {
 
 	        // separa o texto em palavras ignorando os espaços entre eles (se tiver).
 	        String[] palavras = titulo.split("\\s+");
+	        
+	        Set<String> STOPWORDS = carregarStopwords("stopwords.txt");
 
 	        for (String p : palavras) {
-	            if (p.length() <= 4) continue; // ignora palavras muito curtas
+	            if (p.length() <= 1) continue; // ignora letras/palavras muito curtas que possam nao estar no stopwords
+	            if (STOPWORDS.contains(p)) continue; //ignorar os conectivos
 
 	            mapa.put(p, mapa.getOrDefault(p, 0) + 1);
 	        }
 	    }
-	    //imprime as 30 palavras mais frequentes.
-	    mapa.entrySet().stream().sorted((a,b) -> b.getValue() - a.getValue()).limit(30).forEach(System.out::println);
+	    //imprime as 100 palavras mais frequentes.
+	    mapa.entrySet().stream().sorted((a,b) -> b.getValue() - a.getValue()).limit(100).forEach(System.out::println);
 
 	    return mapa;
 	}
 	
+	//método para carregar o arquivo de conectivos-stopword.txt
+	//usado para ignorar conectivos no método contadorDePalavras
+	public static Set<String> carregarStopwords(String fileName) {
+	    try {
+	        List<String> linhas = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8); //pega o arquivo na pasta do projeto
+	        return linhas.stream()
+	                .map(String::trim)
+	                .filter(l -> !l.isEmpty())
+	                .collect(Collectors.toSet());
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return Collections.emptySet();
+	    }
+	}
 
 }
