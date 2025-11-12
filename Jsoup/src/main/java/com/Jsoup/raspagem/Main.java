@@ -1,5 +1,6 @@
 package com.Jsoup.raspagem;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -11,6 +12,9 @@ public class Main {
 		String nomeArquivoCSV="";
 		Integer opcao = 0;
 		
+		//
+		//MENU Inicial
+		//
 		while(opcao != 9) {
 		opcao = Integer.parseInt(JOptionPane.showInputDialog("Digite a opção:"
 				 + "\n1 - Digite um site"
@@ -55,6 +59,9 @@ public class Main {
 				}
 			}
 			break;
+			//
+			//fim da opcão 1
+			//
 			
 		case 2:
 				site = "https://g1.com.br";
@@ -84,7 +91,26 @@ public class Main {
 						break;
 						
 					case 2: 
-						Consultas.ContadorDePalavras(noticiasMaisRecentes);
+						Map<String, Integer> listaFrequencia = Consultas.ContadorDePalavras(noticiasMaisRecentes);
+						
+						opcao=0;
+						while(opcao != 2) {
+							opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+									+ "\nDigite a opção:"
+									+ "\n1 - Gerar arquivo .CSV com a frequência das palavras?"
+									 + "\n2 - Voltar"));
+							switch(opcao) {
+							case 1:
+								nomeArquivoCSV = "Frequencia_Noticias_Atuais_G1.csv";
+								Consultas.geraCSVFrequenciaPalavras(listaFrequencia, nomeArquivoCSV);
+								break;
+								
+							case 2:
+								break;
+								default:
+									JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+							}
+						}
 						break;
 					
 					case 3: //faz apenas o break para voltar ao menu anterior
@@ -113,7 +139,26 @@ public class Main {
 						break;
 						
 					case 2:
-						Consultas.ContadorDePalavras(noticiasPaginadas);
+						Map<String, Integer> listaFrequencia = Consultas.ContadorDePalavras(noticiasPaginadas);
+						
+						opcao=0;
+						while(opcao != 2) {
+							opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+									+ "\nDigite a opção:"
+									+ "\n1 - Gerar arquivo .CSV com a frequência das palavras?"
+									 + "\n2 - Voltar"));
+							switch(opcao) {
+							case 1:
+								nomeArquivoCSV = "Frequencia_Noticias_Paginada_G1.csv";
+								Consultas.geraCSVFrequenciaPalavras(listaFrequencia, nomeArquivoCSV);
+								break;
+								
+							case 2:
+								break;
+								default:
+									JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+							}
+						}
 						break;
 						
 					case 3: //faz apenas o break para voltar ao menu anterior
@@ -130,9 +175,12 @@ public class Main {
 				default:
 					JOptionPane.showMessageDialog(null, "Opcão Inválida.");
 			}
-		}
-				
+		}		
 			break;
+			//
+			//fim da opcão 2
+			//
+			
 		case 3:
 			site = "https://uol.com.br";
 			opcao = 0; //seta variável para entrar no sub menu por ser a mesma condicao do case e while
@@ -161,7 +209,26 @@ public class Main {
 							break;
 							
 						case 2:
-							Consultas.ContadorDePalavras(noticiasMaisRecentes);
+							Map<String, Integer> listaFrequencia = Consultas.ContadorDePalavras(noticiasMaisRecentes);
+							
+							opcao=0;
+							while(opcao != 2) {
+								opcao = Integer.parseInt(JOptionPane.showInputDialog(site
+										+ "\nDigite a opção:"
+										+ "\n1 - Gerar arquivo .CSV com a frequência das palavras?"
+										 + "\n2 - Voltar"));
+								switch(opcao) {
+								case 1:
+									nomeArquivoCSV = "Frequência_Noticias_Atuais_UOL.csv";
+									Consultas.geraCSVFrequenciaPalavras(listaFrequencia, nomeArquivoCSV);
+									break;
+									
+								case 2:
+									break;
+									default:
+										JOptionPane.showMessageDialog(null, "Opcão Inválida.");
+								}
+							}
 							break;
 							
 						case 3: //faz apenas o break para voltar ao menu anterior
@@ -177,7 +244,11 @@ public class Main {
 				}
 			}	
 			break;
+			//
+			//Fim da opcão 3
+			//
 				
+			//Opcão de saída
 		case 9:
 			System.exit(0);
 			break;

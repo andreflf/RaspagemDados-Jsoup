@@ -158,7 +158,7 @@ public class Consultas {
 		    }
 
 		    System.out.println("\n\nArquivo gerado com sucesso!\n");
-		    JOptionPane.showMessageDialog(null, "Arquivo " + nomeDoArquivo + " gerado com sucesso"
+		    JOptionPane.showMessageDialog(null, "Arquivo \"" + nomeDoArquivo + "\" gerado com sucesso"
 		    		+ "\nna pasta do projeto.");
 		    
 		  //  bw.close(); // fecha explicitamente o writer (desnecessário aqui porque try-with-resources já fecha)
@@ -198,7 +198,7 @@ public class Consultas {
 	            mapa.put(p, mapa.getOrDefault(p, 0) + 1);
 	        }
 	    }
-	    //imprime as 100 palavras mais frequentes.
+	    //imprime as 100 palavras mais frequentes / IMPORTANTE: para o arquivo CSV vão todas as palavras
 	    mapa.entrySet().stream().sorted((a,b) -> b.getValue() - a.getValue()).limit(100).forEach(System.out::println);
 
 	    return mapa;
@@ -216,6 +216,45 @@ public class Consultas {
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	        return Collections.emptySet(); //evitar null e retornar um Set<String> vazio
+	    }
+	}
+	
+	//Método para gerar um CSV das frequência das palavras
+	public static void geraCSVFrequenciaPalavras(Map<String, Integer> mapa, String filename) {
+	    try {
+	        Path path = Paths.get(filename);
+
+	        // cria o arquivo (ou substitui)
+	        try (BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
+	                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
+
+	            // adiciona BOM para evitar erro de acentuação no Excel
+	            bw.write("\uFEFF");
+
+	            // cabeçalho
+	            bw.write("Palavra;Frequência");
+	            bw.newLine();
+
+	            // ordena o mapa por frequência em ordem decrescente
+	            mapa.entrySet().stream()
+	                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+	                .forEach(palavra -> {
+	                    try {
+	                    	//escreve a palavra e a frequência no arquivo
+	                        bw.write(palavra.getKey() + ";" + palavra.getValue());
+	                        bw.newLine();
+	                    } catch (IOException e) {
+	                        e.printStackTrace();
+	                    }
+	                });
+
+	            JOptionPane.showMessageDialog(null,
+	                "Arquivo \"" + filename + "\" gerado com sucesso na pasta do projeto.");
+
+	        }
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
 	    }
 	}
 
