@@ -210,12 +210,12 @@ public class Consultas {
 	    try {
 	        List<String> linhas = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8); //pega o arquivo na pasta do projeto
 	        return linhas.stream()
-	                .map(String::trim)
-	                .filter(l -> !l.isEmpty())
+	                .map(String::trim) //retira possíveis espaços em branco
+	                .filter(l -> !l.isEmpty()) //filtra possíveis linhas vazias
 	                .collect(Collectors.toSet());
 	    } catch (IOException e) {
 	        e.printStackTrace();
-	        return Collections.emptySet();
+	        return Collections.emptySet(); //evitar null e retornar um Set<String> vazio
 	    }
 	}
 
